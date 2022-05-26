@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  clickhouse:
+    image: yandex/clickhouse-server
+    container_name: clickhouse_db
+    ports:
+      - ${CLICKHOUSE_PORT}:${CLICKHOUSE_PORT}
+    volumes:
+      - ./clickhouse_data:/var/lib/clickhouse/
+    restart: always
+    # environment:
+    #   CLICKHOUSE_DB: ${CLICKHOUSE_DB}
+    #   CLICKHOUSE_USER: ${CLICKHOUSE_USER}
+    #   CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+    #   CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: ${CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT}
+
+  nodejs_app:
+    image: grygoryev/good-example
+    container_name: nodejs_app
+    ports:
+      - ${NODE_APP_PORT}:${NODE_APP_PORT}
+    # environment:
+    #   CLICKHOUSE_HOST: clickhouse
+    restart: always
+    links:
+      - clickhouse
